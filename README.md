@@ -1,105 +1,30 @@
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="./assets/header-dark.svg"/>
-    <source media="(prefers-color-scheme: light)" srcset="./assets/header-light.svg"/>
-    <img src="./assets/header-dark.svg" width="520" alt="Plisquante"/>
-  </picture>
-</p>
-
-<p align="center">
-  Minecraft plugin &amp; mod developer &nbsp;·&nbsp; Kotlin &amp; Java
-</p>
+<img src="./assets/header.svg" width="100%" alt="Plisquante — Minecraft plugin & mod developer. Kotlin & Java developer, writing plugins for Paper and Spigot servers and mods for Fabric. Now building OmniGuard and Themis."/>
 
 <br/>
 
 Hi, I'm **Plisquante**. I write Minecraft plugins and mods, mostly in **Kotlin** and **Java**: server-side work on Paper and Spigot, and Fabric mods when I have some free time.
 
-Most of my time right now goes into two plugins of my own, **[OmniGuard](https://plisquante.github.io/omniguard/)** and **[Themis](https://plisquante.github.io/themis/)**. I care about code that is clean, readable and easy to maintain, and I'm always happy to collaborate on something or review someone else's code.
+Right now most of my time goes into two plugins of my own, **OmniGuard** and **Themis**. I care about code that is clean, readable and easy to maintain, and I'm always happy to collaborate or review someone else's code.
 
 ## Projects
 
-<table>
-  <tr>
-    <td width="120" align="center" valign="top">
-      <br/>
-      <a href="https://plisquante.github.io/omniguard/"><img src="./assets/projects/omniguard.png" width="88" alt="OmniGuard logo"/></a>
-    </td>
-    <td valign="top">
-      <h3><a href="https://plisquante.github.io/omniguard/">OmniGuard</a></h3>
-      <p><b>All-in-one security for Minecraft servers.</b> It stops crash exploits before they are decoded, catches duplicated items however they were made, freezes lag machines and rides out bot floods, without punishing the ten friends who share one IP.</p>
-      <ul>
-        <li>Packet firewall that runs on the network thread, with byte and frame floods dropped before decoding</li>
-        <li>Item Provenance Ledger: valuable items get an invisible identity, so a dupe is caught whatever exploit made it</li>
-        <li>Lag-machine shield, bot-flood protection with an automatic attack mode, and a one-command lockdown</li>
-      </ul>
-      <p><sub>Paper · Purpur · Spigot · Folia &nbsp;|&nbsp; 1.17.1 → 26.x &nbsp;|&nbsp; 37/37 real exploits blocked in the release test suite</sub></p>
-      <p><a href="https://plisquante.github.io/omniguard/">Website</a> &nbsp;·&nbsp; <a href="https://plisquante.github.io/omniguard/docs/">Docs</a></p>
-    </td>
-  </tr>
-  <tr>
-    <td width="120" align="center" valign="top">
-      <br/>
-      <a href="https://plisquante.github.io/themis/"><img src="./assets/projects/themis.png" width="88" alt="Themis logo"/></a>
-    </td>
-    <td valign="top">
-      <h3><a href="https://plisquante.github.io/themis/">Themis</a></h3>
-      <p><b>A moderation plugin that keeps staff fair and consistent.</b> One jar for single servers and whole networks: every punishment is recorded, every decision follows the same rules, and punishments escalate on their own.</p>
-      <ul>
-        <li>Escalating bans, mutes and warnings from punishment templates</li>
-        <li>One record across the whole network, alt-account detection and AutoMod</li>
-        <li>Nine languages, an MIT-licensed Java API, a REST API with signed webhooks, and imports from LiteBans and AdvancedBan</li>
-      </ul>
-      <p><sub>Paper 1.21 → 26.x · Folia · Velocity 3.4+ · BungeeCord &nbsp;|&nbsp; Java 21</sub></p>
-      <p><a href="https://plisquante.github.io/themis/">Website</a> &nbsp;·&nbsp; <a href="https://plisquante.github.io/themis/wiki/">Wiki</a></p>
-    </td>
-  </tr>
-</table>
+<p>
+  <a href="https://plisquante.github.io/omniguard/"><img src="./assets/card-omniguard.svg" width="49%" alt="OmniGuard v1.5.0 — server security. All-in-one protection for Minecraft servers: packet firewall & anti-crash, real dupe detection, lag-machine & bot-flood shield. 37/37 exploits blocked, 35 protections, 0 false positives. Paper, Purpur, Spigot, Folia."/></a>
+  <a href="https://plisquante.github.io/themis/"><img src="./assets/card-themis.svg" width="49%" alt="Themis v1.0.0 — moderation. Fair, consistent moderation for servers and networks: punishments that escalate, one record network-wide, alt detection & AutoMod. 22 commands, 9 languages, 20 API endpoints. Paper, Folia, Velocity, BungeeCord."/></a>
+</p>
 
-## What I work with
+**OmniGuard** stops crash exploits before they are decoded, catches duplicated items however they were made and keeps lag machines and bot floods in check, without punishing players who share an IP. [Website](https://plisquante.github.io/omniguard/) · [Docs](https://plisquante.github.io/omniguard/docs/)
 
-<table>
-  <tr>
-    <td><b>Languages</b></td>
-    <td>
-      <img src="./assets/icons/kotlin.svg" height="18" align="absmiddle" alt=""/>&nbsp;Kotlin &nbsp;&nbsp;
-      <img src="./assets/icons/java.svg" height="18" align="absmiddle" alt=""/>&nbsp;Java
-    </td>
-  </tr>
-  <tr>
-    <td><b>Minecraft</b></td>
-    <td>
-      <img src="./assets/icons/paper.svg" height="18" align="absmiddle" alt=""/>&nbsp;Paper &nbsp;&nbsp;
-      <img src="./assets/icons/spigot.svg" height="18" align="absmiddle" alt=""/>&nbsp;Spigot / Bukkit &nbsp;&nbsp;
-      <img src="./assets/icons/velocity.svg" height="18" align="absmiddle" alt=""/>&nbsp;Velocity &nbsp;&nbsp;
-      <img src="./assets/icons/fabric.png" height="18" align="absmiddle" alt=""/>&nbsp;Fabric
-    </td>
-  </tr>
-  <tr>
-    <td><b>Tools</b></td>
-    <td>
-      <img src="./assets/icons/intellij.svg" height="18" align="absmiddle" alt=""/>&nbsp;IntelliJ IDEA &nbsp;&nbsp;
-      <img src="./assets/icons/vscode.svg" height="18" align="absmiddle" alt=""/>&nbsp;VS Code &nbsp;&nbsp;
-      <img src="./assets/icons/git.svg" height="18" align="absmiddle" alt=""/>&nbsp;Git &nbsp;&nbsp;
-      <img src="./assets/icons/gradle.svg" height="18" align="absmiddle" alt=""/>&nbsp;Gradle
-    </td>
-  </tr>
-  <tr>
-    <td><b>Hosting</b></td>
-    <td>
-      <img src="./assets/icons/pterodactyl.svg" height="18" align="absmiddle" alt=""/>&nbsp;Pterodactyl &nbsp;&nbsp;
-      <img src="./assets/icons/cloudflare.svg" height="18" align="absmiddle" alt=""/>&nbsp;Cloudflare
-    </td>
-  </tr>
-</table>
+**Themis** keeps moderation consistent across a whole network: every punishment is recorded, repeat offences escalate on their own, and staff, plugins and Discord bots all work from the same record. [Website](https://plisquante.github.io/themis/) · [Wiki](https://plisquante.github.io/themis/wiki/)
 
-## GitHub activity
+## Toolbox
+
+<img src="./assets/toolbox.svg" width="100%" alt="Languages: Kotlin, Java. Minecraft: Paper, Spigot, Velocity, Fabric. Tools: IntelliJ IDEA, VS Code, Git, Gradle. Hosting: Pterodactyl, Cloudflare."/>
+
+## Activity
 
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://streak-stats.demolab.com/?user=plisquante&hide_border=true&background=00000000&ring=FFD93D&fire=FFD93D&currStreakLabel=FFD93D&currStreakNum=E6EDF3&sideNums=E6EDF3&sideLabels=9198A1&dates=9198A1&stroke=30363D"/>
-    <source media="(prefers-color-scheme: light)" srcset="https://streak-stats.demolab.com/?user=plisquante&hide_border=true&background=00000000&ring=D4A017&fire=D4A017&currStreakLabel=B8860B&currStreakNum=1F2328&sideNums=1F2328&sideLabels=59636E&dates=59636E&stroke=D1D9E0"/>
-    <img src="https://streak-stats.demolab.com/?user=plisquante&hide_border=true&background=00000000&ring=D4A017&fire=D4A017&currStreakLabel=B8860B&currStreakNum=1F2328&sideNums=1F2328&sideLabels=59636E&dates=59636E&stroke=D1D9E0" width="60%" alt="GitHub contribution streak"/>
-  </picture>
+  <img src="https://streak-stats.demolab.com/?user=plisquante&background=161B22&border=30363D&border_radius=0&stroke=30363D&ring=FFD93D&fire=FFD93D&currStreakLabel=FFD93D&currStreakNum=F0F3F6&sideNums=F0F3F6&sideLabels=8B949E&dates=6E7681" width="60%" alt="GitHub contribution streak"/>
 </p>
 
 <picture>
@@ -108,15 +33,15 @@ Most of my time right now goes into two plugins of my own, **[OmniGuard](https:/
   <img src="https://raw.githubusercontent.com/plisquante/plisquante/output/github-contribution-grid-snake.svg" width="100%" alt="Contribution graph being eaten by a snake"/>
 </picture>
 
-## Get in touch
+## Contact
 
-I'm open to working together on Minecraft projects, code reviews, or just talking plugins. The easiest ways to reach me:
+Open to working together on Minecraft projects, code reviews, or just talking plugins. Mail me at [plisquante@gmail.com](mailto:plisquante@gmail.com) or add me on Discord as `plisquante`.
 
-<img src="./assets/icons/gmail.svg" height="16" align="absmiddle" alt=""/>&nbsp; **Email:** [plisquante@gmail.com](mailto:plisquante@gmail.com)<br/>
-<img src="./assets/icons/discord.svg" height="16" align="absmiddle" alt=""/>&nbsp; **Discord:** `plisquante`<br/>
-<img src="./assets/icons/github.svg" height="16" align="absmiddle" alt=""/>&nbsp; **GitHub:** [@plisquante](https://github.com/plisquante)
-
-<br/>
+<p>
+  <a href="mailto:plisquante@gmail.com"><img src="./assets/contact-email.svg" width="32%" alt="Email: plisquante@gmail.com"/></a>
+  <a href="https://github.com/plisquante"><img src="./assets/contact-github.svg" width="32%" alt="GitHub: @plisquante"/></a>
+  <img src="./assets/contact-discord.svg" width="32%" alt="Discord: plisquante"/>
+</p>
 
 <p align="right">
   <img src="https://komarev.com/ghpvc/?username=plisquante&label=profile%20views&color=D4A017&style=flat-square" alt="Profile views"/>
