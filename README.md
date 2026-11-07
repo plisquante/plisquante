@@ -6,7 +6,7 @@ Hi, I'm **Plisquante**. I write Minecraft plugins and mods, mostly in **Kotlin**
 
 Right now most of my time goes into two plugins of my own, **OmniGuard** and **Themis**. I care about code that is clean, readable and easy to maintain, and I'm always happy to collaborate or review someone else's code.
 
-## Projects
+## <img src="./assets/icons/block.svg" width="28" height="28" alt=""/> Projects
 
 <p>
   <a href="https://plisquante.github.io/omniguard/"><img src="./assets/card-omniguard.svg" width="49%" alt="OmniGuard v1.5.0 — server security. All-in-one protection for Minecraft servers: packet firewall & anti-crash, real dupe detection, lag-machine & bot-flood shield. 37/37 exploits blocked, 35 protections, 0 false positives. Paper, Purpur, Spigot, Folia."/></a>
@@ -17,15 +17,13 @@ Right now most of my time goes into two plugins of my own, **OmniGuard** and **T
 
 **Themis** keeps moderation consistent across a whole network: every punishment is recorded, repeat offences escalate on their own, and staff, plugins and Discord bots all work from the same record. [Website](https://plisquante.github.io/themis/) · [Wiki](https://plisquante.github.io/themis/wiki/)
 
-## Toolbox
+## <img src="./assets/icons/chest.svg" width="28" height="24" alt=""/> Toolbox
 
 <img src="./assets/toolbox.svg" width="100%" alt="Languages: Kotlin, Java. Minecraft: Paper, Spigot, Velocity, Fabric. Tools: IntelliJ IDEA, VS Code, Git, Gradle. Hosting: Pterodactyl, Cloudflare."/>
 
-## Activity
+## <img src="./assets/icons/flame.svg" width="24" height="28" alt=""/> Activity
 
-<p align="center">
-  <img src="https://streak-stats.demolab.com/?user=plisquante&background=161B22&border=30363D&border_radius=0&stroke=30363D&ring=FFD93D&fire=FFD93D&currStreakLabel=FFD93D&currStreakNum=F0F3F6&sideNums=F0F3F6&sideLabels=8B949E&dates=6E7681" width="60%" alt="GitHub contribution streak"/>
-</p>
+<img src="https://raw.githubusercontent.com/plisquante/plisquante/output/contributions.svg" width="100%" alt="Contribution calendar for the last 12 months with current streak, longest streak and best day"/>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/plisquante/plisquante/output/github-contribution-grid-snake-dark.svg"/>
@@ -33,7 +31,7 @@ Right now most of my time goes into two plugins of my own, **OmniGuard** and **T
   <img src="https://raw.githubusercontent.com/plisquante/plisquante/output/github-contribution-grid-snake.svg" width="100%" alt="Contribution graph being eaten by a snake"/>
 </picture>
 
-## Contact
+## <img src="./assets/icons/mail.svg" width="28" height="18" alt=""/> Contact
 
 Open to working together on Minecraft projects, code reviews, or just talking plugins. Mail me at [plisquante@gmail.com](mailto:plisquante@gmail.com) or add me on Discord as `plisquante`.
 
