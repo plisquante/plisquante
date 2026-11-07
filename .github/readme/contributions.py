@@ -460,6 +460,24 @@ def render(cal, today):
         else:
             prog = f'{min(values[key], goal)}/{goal}' + (' days' if key == 'longest' else '')
             b.append(text(prog, x + tw_ // 2, ty0 + 122, 2, DIM, anchor='middle', shadow=False))
+    # toast for the most advanced advancement earned so far: slides in, waits, slides out
+    earned = [a for a in ADVANCEMENTS if values[a[3]] >= a[4]]
+    if earned:
+        t_title, _, t_icon, _, _ = earned[-1]
+        tw2 = max(text_width('Advancement Made!', 2), text_width(t_title, 3)) + 110
+        th2 = 84
+        tx0, ty0_ = W - 24 - tw2, 24
+        toast = [r(tx0 + 4, ty0_, tw2 - 8, th2, '#000000'), r(tx0, ty0_ + 4, tw2, th2 - 8, '#000000'),
+                 r(tx0 + 4, ty0_ + 4, tw2 - 8, th2 - 8, '#1E1E1E'), r(tx0 + 4, ty0_ + 4, tw2 - 8, 4, '#3C3C3C'),
+                 r(tx0 + 4, ty0_ + th2 - 8, tw2 - 8, 4, '#101010')]
+        iw, ih = sprite_size(t_icon)
+        sc = max(1, min(48 // iw, 48 // ih))
+        toast.append(sprite(t_icon, tx0 + 18 + (52 - iw * sc) // 2, ty0_ + (th2 - ih * sc) // 2, sc))
+        toast.append(text('Advancement Made!', tx0 + 86, ty0_ + 20, 2, '#FFFF55'))
+        toast.append(text(t_title, tx0 + 86, ty0_ + 44, 3, TXT))
+        slide = [tw2 + 40, round((tw2 + 40) * .55), round((tw2 + 40) * .25), round((tw2 + 40) * .08), 0]
+        seq = slide + [0] * 45 + slide[::-1] + [tw2 + 40] * 80       # 9 s at 15 fps
+        b.append(f'<g>{frames_anim("translate", [f"{v} 0" for v in seq])}{"".join(toast)}</g>')
     title = (f'{total} contributions in the last year, current streak {current}, longest streak {longest}, '
              f'level {level}, {earned_n} of {len(ADVANCEMENTS)} advancements')
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img">'
