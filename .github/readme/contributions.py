@@ -279,32 +279,6 @@ def frames_anim(attr, values, fps=15):
             f'dur="{n / fps:.4f}s" repeatCount="indefinite"/>')
 
 
-def xp_orbs(bx, bw, by, seed=7):
-    """Experience orbs that drift down and get absorbed by the bar, 15 frames a second."""
-    import random
-    rnd = random.Random(seed)
-    out = []
-    n = 36                                   # 2.4 s loop
-    for k in range(5):
-        x0 = bx + rnd.randint(60, bw - 80)
-        dx = rnd.randint(-40, 40)
-        delay = rnd.randint(0, n - 1)
-        pos, op = [], []
-        for f in range(n):
-            t = ((f - delay) % n) / 18          # travel takes 18 frames, then the orb is gone
-            if t >= 1:
-                pos.append('0 0'); op.append('0')
-                continue
-            e = t * t
-            x = round(dx * t)
-            y = round(-70 + 74 * e + 6 * abs(__import__('math').sin(t * 9)) * (1 - t))
-            pos.append(f'{x} {y}')
-            op.append('1' if t < .92 else '0')
-        orb = sprite('orb', x0, by, 2)
-        out.append(f'<g opacity="0">{frames_anim("opacity", op)}<g>{frames_anim("translate", pos)}{orb}</g></g>')
-    return ''.join(out)
-
-
 def xp_for_level(level):
     """Total experience needed to reach a level, using Minecraft's formula."""
     if level <= 16:
@@ -397,7 +371,6 @@ def render(cal, today):
         hx += 40
     b.append(outlined(str(level), W // 2, by - 52, 5, XP, anchor='middle'))
     b.append(xp_bar(bx, by, units, u, frac))
-    b.append(xp_orbs(bx, units * u, by - 4))
     b.append(text('Hearts: last 10 days', bx, by + 42, 2, DIM))
     b.append(text(f'Level {level}, {to_next} more to level {level + 1}', bx + units * u, by + 42, 2, DIM, anchor='end'))
 
@@ -460,7 +433,7 @@ def render(cal, today):
         else:
             prog = f'{min(values[key], goal)}/{goal}' + (' days' if key == 'longest' else '')
             b.append(text(prog, x + tw_ // 2, ty0 + 122, 2, DIM, anchor='middle', shadow=False))
-    # toast for the most advanced advancement earned so far: slides in, waits, slides out
+    # toast for the most advanced advancement earned so far: slides in, waits, slides out, once a minute
     earned = [a for a in ADVANCEMENTS if values[a[3]] >= a[4]]
     if earned:
         t_title, _, t_icon, _, _ = earned[-1]
@@ -476,7 +449,7 @@ def render(cal, today):
         toast.append(text('Advancement Made!', tx0 + 86, ty0_ + 20, 2, '#FFFF55'))
         toast.append(text(t_title, tx0 + 86, ty0_ + 44, 3, TXT))
         slide = [tw2 + 40, round((tw2 + 40) * .55), round((tw2 + 40) * .25), round((tw2 + 40) * .08), 0]
-        seq = slide + [0] * 45 + slide[::-1] + [tw2 + 40] * 80       # 9 s at 15 fps
+        seq = slide + [0] * 45 + slide[::-1] + [tw2 + 40] * (900 - 55)   # once a minute at 15 fps
         b.append(f'<g>{frames_anim("translate", [f"{v} 0" for v in seq])}{"".join(toast)}</g>')
     title = (f'{total} contributions in the last year, current streak {current}, longest streak {longest}, '
              f'level {level}, {earned_n} of {len(ADVANCEMENTS)} advancements')
