@@ -201,7 +201,14 @@ def render(cal, today):
         b.append(slot(x, 32, sw, 104))
         b.append(text(lbl, x + 18, 50, 3, MUTED))
         b.append(text(val, x + 18, 78, 6, GOLD))
-        b.append(text(unit, x + 26 + text_width(val, 6), 93, 3, MUTED))
+        ux = x + 26 + text_width(val, 6)
+        room = x + sw - 14 - ux
+        for us, uy in ((3, 93), (2, 96)):      # shrink the unit if it does not fit
+            if text_width(unit, us) <= room or us == 2:
+                break
+        if text_width(unit, us) > room:
+            unit = unit.replace('on ', '')
+        b.append(text(unit, ux, uy, us, MUTED))
     # month labels + grid
     cs, step = 18, 21
     gx = (W - (len(weeks) * step - 3)) // 2
