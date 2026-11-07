@@ -270,6 +270,41 @@ ADVANCEMENTS = [
 ]
 
 
+def frames_anim(attr, values, fps=15):
+    """Discrete SMIL animation stepping through values at a fixed frame rate."""
+    n = len(values)
+    kt = ';'.join(f'{i / n:.4f}' for i in range(n))
+    kind = 'animateTransform attributeName="transform" type="translate"' if attr == 'translate' else f'animate attributeName="{attr}"'
+    return (f'<{kind} values="{";".join(values)}" keyTimes="{kt}" calcMode="discrete" '
+            f'dur="{n / fps:.4f}s" repeatCount="indefinite"/>')
+
+
+def xp_orbs(bx, bw, by, seed=7):
+    """Experience orbs that drift down and get absorbed by the bar, 15 frames a second."""
+    import random
+    rnd = random.Random(seed)
+    out = []
+    n = 36                                   # 2.4 s loop
+    for k in range(5):
+        x0 = bx + rnd.randint(60, bw - 80)
+        dx = rnd.randint(-40, 40)
+        delay = rnd.randint(0, n - 1)
+        pos, op = [], []
+        for f in range(n):
+            t = ((f - delay) % n) / 18          # travel takes 18 frames, then the orb is gone
+            if t >= 1:
+                pos.append('0 0'); op.append('0')
+                continue
+            e = t * t
+            x = round(dx * t)
+            y = round(-70 + 74 * e + 6 * abs(__import__('math').sin(t * 9)) * (1 - t))
+            pos.append(f'{x} {y}')
+            op.append('1' if t < .92 else '0')
+        orb = sprite('orb', x0, by, 2)
+        out.append(f'<g opacity="0">{frames_anim("opacity", op)}<g>{frames_anim("translate", pos)}{orb}</g></g>')
+    return ''.join(out)
+
+
 def xp_for_level(level):
     """Total experience needed to reach a level, using Minecraft's formula."""
     if level <= 16:
@@ -348,11 +383,21 @@ def render(cal, today):
     by = 224
     recent = days[-10:]
     hx = bx
-    for d in recent:
-        b.append(sprite('heart' if d['contributionCount'] else 'heart_empty', hx, by - 46, 4))
+    for i, d in enumerate(recent):
+        full = bool(d['contributionCount'])
+        if full and i == len(recent) - 1:
+            # today's heart beats: two quick pulses, then a pause
+            big = sprite('heart', hx - 4, by - 50, 5)
+            small = sprite('heart', hx, by - 46, 4)
+            seq = ['1', '0', '1', '0'] + ['0'] * 14
+            b.append(f'<g>{frames_anim("opacity", seq)}{big}</g>')
+            b.append(f'<g opacity="0">{frames_anim("opacity", ["0" if v == "1" else "1" for v in seq])}{small}</g>')
+        else:
+            b.append(sprite('heart' if full else 'heart_empty', hx, by - 46, 4))
         hx += 40
     b.append(outlined(str(level), W // 2, by - 52, 5, XP, anchor='middle'))
     b.append(xp_bar(bx, by, units, u, frac))
+    b.append(xp_orbs(bx, units * u, by - 4))
     b.append(text('Hearts: last 10 days', bx, by + 42, 2, DIM))
     b.append(text(f'Level {level}, {to_next} more to level {level + 1}', bx + units * u, by + 42, 2, DIM, anchor='end'))
 
