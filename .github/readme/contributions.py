@@ -194,6 +194,23 @@ def month_day(date):
     return f'{MONTHS[int(date[5:7]) - 1]} {int(date[8:10])}'
 
 
+def xp_for_level(level):
+    """Total experience needed to reach a level, using Minecraft's formula."""
+    if level <= 16:
+        return level * level + 6 * level
+    if level <= 31:
+        return 2.5 * level * level - 40.5 * level + 360
+    return 4.5 * level * level - 162.5 * level + 2220
+
+
+def level_of(xp):
+    level = 0
+    while xp_for_level(level + 1) <= xp:
+        level += 1
+    span = xp_for_level(level + 1) - xp_for_level(level)
+    return level, (xp - xp_for_level(level)) / span, int(round(xp_for_level(level + 1) - xp))
+
+
 def streaks(days):
     counts = [d['contributionCount'] for d in days]
     longest = run = 0
@@ -217,7 +234,7 @@ def render(cal, today):
     current, longest = streaks(days)
     best = max(days, key=lambda d: d['contributionCount']) if days else None
 
-    W, H = 1200, 392
+    W, H = 1200, 464
     b = [panel(W, H)]
     # headline
     b.append(text('CONTRIBUTIONS', 36, 34, 2, GOLD))
@@ -246,7 +263,25 @@ def render(cal, today):
     # month labels + grid
     cs, step = 18, 21
     gx = (W - (len(weeks) * step - 3)) // 2
-    gy = 196
+    gw = len(weeks) * step - 3
+    # experience bar: contributions count as XP, levels follow Minecraft's curve
+    level, frac, to_next = level_of(total)
+    by, bh = 196, 20
+    b.append(text('Level', gx, by - 26, 2, MUTED))
+    b.append(text(str(level), W // 2, by - 38, 4, XP, anchor='middle'))
+    b.append(text(f'{to_next} more to level {level + 1}', gx + gw, by - 26, 2, MUTED, anchor='end'))
+    b.append(r(gx - 3, by - 3, gw + 6, bh + 6, '#05070A'))
+    b.append(r(gx, by, gw, bh, '#1A2A12'))
+    b.append(r(gx, by, gw, 3, '#22361A'))
+    fw = max(0, int(gw * frac))
+    if fw:
+        b.append(r(gx, by, fw, bh, '#6FE01C'))
+        b.append(r(gx, by, fw, 4, '#BFFF8A'))
+        b.append(r(gx, by + bh - 4, fw, 4, '#4C9E10'))
+    for i in range(1, 18):                     # notches
+        nx = gx + round(gw * i / 18)
+        b.append(r(nx - 1, by + 4, 3, bh - 8, '#05070A'))
+    gy = 260
     last_label = -9
     prev_month = None
     for wi, w in enumerate(weeks):
