@@ -187,11 +187,87 @@ def cell(x, y, level, seed, s=3):
             r(x + sx * s, y + sy * s, s, s, hi) + r(x + (sx + 1) * s, y + (sy + 2) * s, s, s, lo))
 
 
+SPRITES = {  # pixel art drawn for this profile: rows separated by |, one letter per colour
+    'pickaxe': ('....a...........|...abaaa........|...acbbba.......|...adcccbaa.....|....aaddcbba....|......aadcbba...|........adcba...|......aa.adcba..|.....aefa.adcba.|....aeffa.adcba.|...aeffa...acba.|..aeffa....adcba|.aeffa......aaa.|aeffa...........|affa............|.aa.............', {'a': '#24292F', 'b': '#F2F5F8', 'c': '#B4BEC9', 'd': '#7F8A96', 'e': '#7A5228', 'f': '#A0703A'}),
+    'flame': ('......a.....|......a.....|.....aa.....|.....aba....|.....bba....|....abbb....|....abcb....|...abccbad..|.aaabceca...|.aabceecbaa.|.aabceecbaa.|aabceeeecbaa|abbceeeecbaa|abceeeeeecba', {'a': '#E2470E', 'b': '#FF8A1E', 'c': '#FFD24A', 'd': '#FFB347', 'e': '#FFF6C8'}),
+    'chest': ('.aaaaaaaaaaaa.|abbbbbbbbbbbba|acccccccccccca|aaaaaaddaaaaaa|aaaaaadeaaaaaa|acccccddccccca|acccccccccccca|acccccccccccca|affffffffffffa|aaaaaaaaaaaaaa|.aaaaaaaaaaaa.', {'a': '#3A2410', 'b': '#C08A4A', 'c': '#A0703A', 'd': '#5E4404', 'e': '#D9DEE4', 'f': '#7A5228'}),
+    'gem': ('..aaaa..|.abbcca.|abbcccca|acccccda|.acccda.|..acda..|...aa...', {'a': '#0B3A44', 'b': '#E8FFFF', 'c': '#55FFFF', 'd': '#1FA8C0'}),
+    'orb': ('..aaaa..|.abbcca.|abbcccca|acccccda|acccccda|abccccda|.acddda.|..aaaa..', {'a': '#1D4D08', 'b': '#E9FFB8', 'c': '#9CFF3C', 'd': '#4FB80F'}),
+    'star': ('....a....|...aba...|...aba...|aaabbbaaa|abbbcbbba|.abbbbba.|..abbba..|.abba.aba|.aa.....a', {'a': '#5A3D00', 'b': '#FFE24D', 'c': '#FFFBD0'}),
+    'heart': ('.aa...aa.|abba.abba|abcbabbba|abbbbbbba|.abbbbba.|..abbba..|...aba...|....a....', {'a': '#2A0606', 'b': '#E8312E', 'c': '#FFB0A8'}),
+    'heart_empty': ('.aa...aa.|abba.abba|abbbabbba|abbbbbbba|.abbbbba.|..abbba..|...aba...|....a....', {'a': '#1A0B0B', 'b': '#3A2224'}),
+}
+
 MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 
 def month_day(date):
     return f'{MONTHS[int(date[5:7]) - 1]} {int(date[8:10])}'
+
+
+def sprite(name, x, y, scale, locked=False):
+    rows, pal = SPRITES[name]
+    out = []
+    for ry, row in enumerate(rows.split('|')):
+        i = 0
+        while i < len(row):
+            ch = row[i]
+            if ch == '.':
+                i += 1
+                continue
+            j = i
+            while j + 1 < len(row) and row[j + 1] == ch:
+                j += 1
+            col = pal[ch]
+            if locked:      # dark silhouette for advancements that are not earned yet
+                v = sum(int(col[k:k + 2], 16) for k in (1, 3, 5)) / 3
+                col = '#%02X%02X%02X' % ((26 + int(v / 10),) * 3)
+            out.append(r(x + i * scale, y + ry * scale, (j - i + 1) * scale, scale, col))
+            i = j + 1
+    return ''.join(out)
+
+
+def sprite_size(name):
+    rows = SPRITES[name][0].split('|')
+    return max(len(x) for x in rows), len(rows)
+
+
+def outlined(s, x, y, scale, color, anchor='start'):
+    """Number drawn with a black outline, like the level above the experience bar."""
+    if anchor == 'middle':
+        x -= text_width(s, scale) // 2
+    out = [glyphs(s, x + dx * scale, y + dy * scale, scale, '#000000') for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1))]
+    return ''.join(out) + glyphs(s, x, y, scale, color)
+
+
+def xp_bar(x, y, units, u, frac):
+    """Experience bar drawn on a 5-pixel-high grid (u = size of one pixel)."""
+    out = [r(x + u, y, (units - 2) * u, u, '#000000'), r(x + u, y + 4 * u, (units - 2) * u, u, '#000000'),
+           r(x, y + u, u, 3 * u, '#000000'), r(x + (units - 1) * u, y + u, u, 3 * u, '#000000')]
+    inner = units - 2
+    filled = int(round(inner * frac))
+    for i in range(inner):
+        px = x + (i + 1) * u
+        on = i < filled
+        notch = (i + 1) % 10 == 0
+        if on:
+            cols = ('#7DD43C', '#5FB322', '#4A9416') if notch else ('#C6FF8A', '#80FF20', '#4FB80F')
+        else:
+            cols = ('#0E1A08', '#0B1506', '#081004') if notch else ('#22361A', '#1A2A12', '#132010')
+        for k, c in enumerate(cols):
+            out.append(r(px, y + (k + 1) * u, u, u, c))
+    return ''.join(out)
+
+
+ADVANCEMENTS = [
+    # (title, description, icon, key, goal)
+    ('First Steps', 'Contribute once', 'pickaxe', 'total', 1),
+    ('Hot Streak', '3 days in a row', 'flame', 'longest', 3),
+    ('Committed', '50 in a year', 'chest', 'total', 50),
+    ('Leveling Up', 'Reach level 5', 'orb', 'level', 5),
+    ('Week Warrior', '7 days in a row', 'gem', 'longest', 7),
+    ('Centurion', '100 in a year', 'star', 'total', 100),
+]
 
 
 def xp_for_level(level):
@@ -234,7 +310,8 @@ def render(cal, today):
     current, longest = streaks(days)
     best = max(days, key=lambda d: d['contributionCount']) if days else None
 
-    W, H = 1200, 464
+    level, frac, to_next = level_of(total)
+    W, H = 1200, 756
     b = [panel(W, H)]
     # headline
     b.append(text('CONTRIBUTIONS', 36, 34, 2, GOLD))
@@ -260,28 +337,27 @@ def render(cal, today):
         if text_width(unit, us) > room:
             unit = unit.replace('on ', '')
         b.append(text(unit, ux, uy, us, MUTED))
-    # month labels + grid
+
     cs, step = 18, 21
-    gx = (W - (len(weeks) * step - 3)) // 2
     gw = len(weeks) * step - 3
-    # experience bar: contributions count as XP, levels follow Minecraft's curve
-    level, frac, to_next = level_of(total)
-    by, bh = 196, 20
-    b.append(text('Level', gx, by - 26, 2, MUTED))
-    b.append(text(str(level), W // 2, by - 38, 4, XP, anchor='middle'))
-    b.append(text(f'{to_next} more to level {level + 1}', gx + gw, by - 26, 2, MUTED, anchor='end'))
-    b.append(r(gx - 3, by - 3, gw + 6, bh + 6, '#05070A'))
-    b.append(r(gx, by, gw, bh, '#1A2A12'))
-    b.append(r(gx, by, gw, 3, '#22361A'))
-    fw = max(0, int(gw * frac))
-    if fw:
-        b.append(r(gx, by, fw, bh, '#6FE01C'))
-        b.append(r(gx, by, fw, 4, '#BFFF8A'))
-        b.append(r(gx, by + bh - 4, fw, 4, '#4C9E10'))
-    for i in range(1, 18):                     # notches
-        nx = gx + round(gw * i / 18)
-        b.append(r(nx - 1, by + 4, 3, bh - 8, '#05070A'))
-    gy = 260
+    gx = (W - gw) // 2
+    # --- HUD: hearts for the last 10 days, level and experience bar
+    u = 6
+    units = gw // u
+    bx = (W - units * u) // 2
+    by = 224
+    recent = days[-10:]
+    hx = bx
+    for d in recent:
+        b.append(sprite('heart' if d['contributionCount'] else 'heart_empty', hx, by - 46, 4))
+        hx += 40
+    b.append(outlined(str(level), W // 2, by - 52, 5, XP, anchor='middle'))
+    b.append(xp_bar(bx, by, units, u, frac))
+    b.append(text('Hearts: last 10 days', bx, by + 42, 2, DIM))
+    b.append(text(f'Level {level}, {to_next} more to level {level + 1}', bx + units * u, by + 42, 2, DIM, anchor='end'))
+
+    # --- calendar
+    gy = 336
     last_label = -9
     prev_month = None
     for wi, w in enumerate(weeks):
@@ -289,32 +365,58 @@ def render(cal, today):
         m = int(first[5:7])
         if m != prev_month and wi - last_label >= 3 and wi < len(weeks) - 1:
             if prev_month is not None or int(first[8:10]) <= 7:
-                b.append(text(MONTHS[m - 1],
-                              gx + wi * step, gy - 28, 2, DIM))
+                b.append(text(MONTHS[m - 1], gx + wi * step, gy - 28, 2, DIM))
                 last_label = wi
         prev_month = m
     for wi, w in enumerate(weeks):
-        col = []
-        for d in w['contributionDays']:
-            lvl = LEVEL_NAMES.get(d['contributionLevel'], 0)
-            col.append(cell(gx + wi * step, gy + d['weekday'] * step, lvl, d['date']))
-        b.append(''.join(col))
-    # today: a blinking selection frame
-    if days:
+        b.append(''.join(cell(gx + wi * step, gy + d['weekday'] * step, LEVEL_NAMES.get(d['contributionLevel'], 0), d['date'])
+                         for d in w['contributionDays']))
+    if days:        # today: a blinking selection frame
         last = days[-1]
         tx, ty = gx + (len(weeks) - 1) * step - 3, gy + last['weekday'] * step - 3
         b.append(f'<g fill="none" stroke="#FFFFFF" stroke-width="2"><rect x="{tx + 1}" y="{ty + 1}" width="{cs + 4}" height="{cs + 4}"/>'
                  f'<animate attributeName="opacity" values="1;0" dur="1s" calcMode="discrete" repeatCount="indefinite"/></g>')
-    # footer: updated date + legend
     fy = gy + 7 * step + 22
     b.append(text(f'Updated {today}', gx, fy, 2, DIM))
-    lx = gx + len(weeks) * step - 3
+    lx = gx + gw
     b.append(text('More', lx, fy, 2, DIM, anchor='end'))
     lx -= text_width('More', 2) + 10 + 5 * step
     for lv in range(5):
         b.append(cell(lx + lv * step, fy - 2, lv, f'legend{lv}'))
     b.append(text('Less', lx - 10, fy, 2, DIM, anchor='end'))
-    title = f'{total} contributions in the last year, current streak {current}, longest streak {longest}'
+
+    # --- advancements, earned from the same data
+    ay = fy + 44
+    values = {'total': total, 'longest': longest, 'level': level}
+    earned_n = sum(values[k] >= g for _, _, _, k, g in ADVANCEMENTS)
+    b.append(text('ADVANCEMENTS', gx, ay, 2, GOLD))
+    b.append(text(f'{earned_n}/{len(ADVANCEMENTS)} earned', gx + gw, ay, 2, DIM, anchor='end'))
+    n = len(ADVANCEMENTS)
+    tgap = 12
+    tw_ = (gw - (n - 1) * tgap) // n
+    ty0 = ay + 28
+    for i, (title_, desc, icon, key, goal) in enumerate(ADVANCEMENTS):
+        x = gx + i * (tw_ + tgap)
+        got = values[key] >= goal
+        b.append(slot(x, ty0, tw_, 150, fill='#0F141A'))
+        fs = 72
+        fx = x + (tw_ - fs) // 2
+        fyy = ty0 + 16
+        frame_col = XP if got else '#2A3340'
+        b.append(r(fx, fyy, fs, fs, '#0A0D11'))
+        b.append(r(fx, fyy, fs, 4, frame_col) + r(fx, fyy + fs - 4, fs, 4, frame_col) +
+                 r(fx, fyy, 4, fs, frame_col) + r(fx + fs - 4, fyy, 4, fs, frame_col))
+        iw, ih = sprite_size(icon)
+        sc = max(1, min(44 // iw, 44 // ih))
+        b.append(sprite(icon, fx + (fs - iw * sc) // 2, fyy + (fs - ih * sc) // 2, sc, locked=not got))
+        b.append(text(title_, x + tw_ // 2, ty0 + 100, 2, TXT if got else MUTED, anchor='middle'))
+        if got:
+            b.append(text(desc, x + tw_ // 2, ty0 + 122, 2, DIM, anchor='middle', shadow=False))
+        else:
+            prog = f'{min(values[key], goal)}/{goal}' + (' days' if key == 'longest' else '')
+            b.append(text(prog, x + tw_ // 2, ty0 + 122, 2, DIM, anchor='middle', shadow=False))
+    title = (f'{total} contributions in the last year, current streak {current}, longest streak {longest}, '
+             f'level {level}, {earned_n} of {len(ADVANCEMENTS)} advancements')
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img">'
             f'<title>{title}</title><g shape-rendering="crispEdges">{"".join(b)}</g></svg>\n')
 
