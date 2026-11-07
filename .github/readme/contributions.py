@@ -229,10 +229,7 @@ def render(cal, today):
         for d in w['contributionDays']:
             lvl = LEVEL_NAMES.get(d['contributionLevel'], 0)
             col.append(cell(gx + wi * step, gy + d['weekday'] * step, lvl, d['date']))
-        # columns drop in one after another when the image loads
-        # (visible by default, so renderers without SMIL still show the calendar)
-        b.append(f'<g><animate attributeName="opacity" values="0;1" keyTimes="0;{min(.99, wi * 0.02 / 1.2):.3f}" '
-                 f'calcMode="discrete" dur="1.2s" fill="freeze"/>{"".join(col)}</g>')
+        b.append(''.join(col))
     # today: a blinking selection frame
     if days:
         last = days[-1]
