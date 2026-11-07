@@ -23,7 +23,7 @@ Right now most of my time goes into two plugins of my own, **OmniGuard** and **T
 
 ## <img src="./assets/icons/flame.svg" width="24" height="32" alt=""/> Activity
 
-<img src="https://raw.githubusercontent.com/plisquante/plisquante/output/contributions.svg" width="100%" alt="Contributions in the last 12 months: total, current and longest streak, best day, an experience level and a calendar"/>
+<img src="https://raw.githubusercontent.com/plisquante/plisquante/output/contributions.svg" width="100%" alt="Contributions in the last 12 months: total, current and longest streak, best day, hearts for the last 10 days, an experience level, a calendar and advancements"/>
 
 ## <img src="./assets/icons/mail.svg" width="34" height="32" alt=""/> Contact
 
@@ -33,11 +33,4 @@ Open to working together on Minecraft projects, code reviews, or just talking pl
   <a href="mailto:plisquante@gmail.com"><img src="./assets/contact-email.svg" width="32%" alt="Email: plisquante@gmail.com"/></a>
   <a href="https://github.com/plisquante"><img src="./assets/contact-github.svg" width="32%" alt="GitHub: @plisquante"/></a>
   <img src="./assets/contact-discord.svg" width="32%" alt="Discord: plisquante"/>
-</p>
-
-<br/>
-
-<p align="right">
-  <img src="https://komarev.com/ghpvc/?username=plisquante&label=profile%20views&color=D4A017&style=flat-square" alt="Profile views"/><br/>
-  <sub>Pixel font: "Minecraft" by Pwnage_Block, CC BY-SA 3.0</sub>
 </p>
